@@ -1,0 +1,9 @@
+{
+    "path" : "~/correlates_reporting/base_riskscore",
+    "sortOrder" : [
+        {
+            "ascending" : true,
+            "columnIndex" : 2
+        }
+    ]
+}
