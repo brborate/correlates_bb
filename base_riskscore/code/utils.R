@@ -139,7 +139,7 @@ cv_r2 <- function(preds, Y, folds, scale = "identity",
   all_eifs <- lapply(ests_eifs, function(l) l$eif)
   se <- vimp::vimp_se(list(est = est, all_eifs = all_eifs), n = length(Y))
   ci <- vimp::vimp_ci(est, se, scale = scale, level = 0.95)
-  return(list(auc = est, se = se, ci = ci))
+  return(list(r2 = est, se = se, ci = ci))
 }
 # get the folds from a CV.SL object, make them a vector
 # @param cv_sl_folds the CV.SL folds (a named list of row numbers)
@@ -245,6 +245,7 @@ get_all_r2s <- function(sl_fit, scale = "identity",
                           Z = Z, ...)
   out <- rbind(out, data.frame(Learner="Discrete SL", Screen="All",
                                R2 = discrete_sl_r2$r2,
+                               se = discrete_sl_r2$se,
                                ci_ll = discrete_sl_r2$ci[1],
                                ci_ul = discrete_sl_r2$ci[2]))
 
@@ -265,7 +266,7 @@ get_all_r2s <- function(sl_fit, scale = "identity",
     screen <- paste0(alg_screen_string[!grepl(alg, alg_screen_string,
                                               fixed = TRUE)], collapse = "_")
     data.frame(Learner = alg, Screen = screen, R2 = alg_r2$r2,
-               ci_ll = alg_r2$ci[1], ci_ul = alg_r2$ci[2])
+               se = alg_r2$se, ci_ll = alg_r2$ci[1], ci_ul = alg_r2$ci[2])
   }
   other_r2s <- plyr::ldply(1:ncol(sl_fit$library.predict),
                            function(x) get_individual_r2(
